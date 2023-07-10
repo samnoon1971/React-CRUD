@@ -1,0 +1,29 @@
+name: Assign Issue
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  assign_issue:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Assign issue
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          issue_number=11 
+          assignee=samnoon1971  
+          
+          curl -X POST \
+            -H "Authorization: Bearer $GITHUB_TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            https://api.github.com/repos/${{ github.repository }}/issues/${issue_number}/assignees \
+            -d '{
+              "assignees": ["'${assignee}'"]
+            }'
